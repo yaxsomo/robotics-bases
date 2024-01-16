@@ -10,7 +10,7 @@ def computeDK(theta1, theta2, theta3):
     p3_x = L_proj * math.cos(theta1)
     p3_y = L_proj * math.sin(theta1)
     p3_z = p2_z + (constants.constL3 * math.sin(alpha))
-    result = [p3_x, p3_y, p3_z]
+    result = [p3_x, p3_y, -p3_z]
     return result
     
 def computeIK():
