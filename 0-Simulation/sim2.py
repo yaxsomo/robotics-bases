@@ -62,9 +62,15 @@ targets = {"motor" + str(k + 1): 0 for k in range(3)}
 while True:
     if sim.t > 1.0:
         if args.mode == "direct":
-            for joint in joints:
-                targets[joint] = p.readUserDebugParameter(sliders[joint])
+           
+            try:
+                for joint in joints:
+                    targets[joint] = p.readUserDebugParameter(sliders[joint])
+            except Exception as e:
+                continue
 
+         
+            
             T = kinematics.computeDK(
                 -targets["motor1"], -targets["motor2"], targets["motor3"]
             )
@@ -73,7 +79,7 @@ while True:
             T[2] += bz
 
             p.resetBasePositionAndOrientation(target, T, [0, 0, 0, 1])
-
+            
         elif args.mode == "inverse" or args.mode == "inverse-iterative":
             x = p.readUserDebugParameter(sliders["target_x"])
             y = p.readUserDebugParameter(sliders["target_y"])
