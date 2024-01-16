@@ -6,19 +6,6 @@ Robotics initiation class materials by Remi Fabre and Steve N'Guyen is licensed 
 From the a DC motor to a walking Hexapod, an introduction to robotics.
 ![Hexapod](hexapod.jpg)
 
-# Requirements
-
-## Every student should:
-
-- Have a git account setuped and be confortable with git. Here is a [git tutorial](https://www.atlassian.com/git/tutorials/setting-up-a-repository) if needed.
-- Clone this repository
-```bash
-git clone git@bitbucket.org:RemiFabre/robotics_initiation.git
-```
-- Install the Pypot library: https://github.com/poppy-project/pypot
-```bash
-python setup.py install --user
-```
 
 ## Notes
 
