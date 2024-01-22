@@ -81,11 +81,14 @@ while True:
             p.resetBasePositionAndOrientation(target, T, [0, 0, 0, 1])
             
         elif args.mode == "inverse" or args.mode == "inverse-iterative":
-            x = p.readUserDebugParameter(sliders["target_x"])
-            y = p.readUserDebugParameter(sliders["target_y"])
-            z = p.readUserDebugParameter(sliders["target_z"])
-            p.resetBasePositionAndOrientation(target, [x + bx, y, z + bz], [0, 0, 0, 1])
 
+            try:            
+                x = p.readUserDebugParameter(sliders["target_x"])
+                y = p.readUserDebugParameter(sliders["target_y"])
+                z = p.readUserDebugParameter(sliders["target_z"])
+                p.resetBasePositionAndOrientation(target, [x + bx, y, z + bz], [0, 0, 0, 1])
+            except Exception as e:
+                continue
             if args.mode == "inverse":
                 alphas = kinematics.computeIK(x, y, z)
                 print(
