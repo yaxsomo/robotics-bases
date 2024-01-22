@@ -111,11 +111,13 @@ while True:
                     }
 
         elif args.mode == "triangle":
-            x = p.readUserDebugParameter(sliders["triangle_x"])
-            z = p.readUserDebugParameter(sliders["triangle_z"])
-            h = p.readUserDebugParameter(sliders["triangle_h"])
-            w = p.readUserDebugParameter(sliders["triangle_w"])
-
+            try:
+                x = p.readUserDebugParameter(sliders["triangle_x"])
+                z = p.readUserDebugParameter(sliders["triangle_z"])
+                h = p.readUserDebugParameter(sliders["triangle_h"])
+                w = p.readUserDebugParameter(sliders["triangle_w"])
+            except Exception as e:
+                continue
             alphas = kinematics.triangle(x, z, h, w, sim.t)
             targets = {
                 "motor1": -alphas[0],

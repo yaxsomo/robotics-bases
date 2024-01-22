@@ -1,5 +1,6 @@
 import math
 import constants
+import numpy as np
 
 def computeDK(theta1, theta2, theta3):
     alpha = theta2 + theta3
@@ -46,3 +47,29 @@ def computeIK(p3_x, p3_y, p3_z):
     theta3 = math.pi + alpha
 
     return [theta1, theta2, theta3]
+
+
+
+
+def triangle(triangle_x, triangle_z, triangle_h, triangle_w, t):
+
+    A = [triangle_x, 0, triangle_h + triangle_z]
+    B = [triangle_x, -triangle_w / 2, triangle_z]
+    C = [triangle_x, triangle_w / 2, triangle_z]
+    ext_triangle = [A,B,C]
+    pre_IK = []
+
+    # Sans int() => TypeError: list indices must be integers or slices, not float
+    v0 = ext_triangle[int(t) % 3] 
+    v1 = ext_triangle[(int(t) + 1) % 3] # (int(t) + 1) => si sans () => IndexError: list index out of range
+
+    t_linear_interpolation = t % 1
+
+    
+    for i in range(3):
+        v = (1 - t_linear_interpolation) * v0[i] + t_linear_interpolation * v1[i]
+        pre_IK.append(v)
+    
+    thetas = computeIK(pre_IK[0], pre_IK[1], pre_IK[2])
+
+    return thetas
