@@ -76,7 +76,7 @@ def triangle(triangle_x, triangle_z, triangle_h, triangle_w, t, duration):
 
 
 def circle(circle_x, circle_z, circle_r, t, duration):
-    theta =  (t  / duration) % 2 * math.pi
+    theta =  (t  / duration) * 2 * math.pi
     M = [circle_x, circle_r*math.sin(theta), circle_r*math.cos(theta) + circle_z]
 
     return computeIK(M[0],M[1],M[2])
