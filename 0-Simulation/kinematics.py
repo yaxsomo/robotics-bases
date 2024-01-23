@@ -51,7 +51,7 @@ def computeIK(p3_x, p3_y, p3_z):
 
 
 
-def triangle(triangle_x, triangle_z, triangle_h, triangle_w, t):
+def triangle(triangle_x, triangle_z, triangle_h, triangle_w, t, duration):
 
     A = [triangle_x, 0, triangle_h + triangle_z]
     B = [triangle_x, -triangle_w / 2, triangle_z]
@@ -59,12 +59,12 @@ def triangle(triangle_x, triangle_z, triangle_h, triangle_w, t):
     ext_triangle = [A,B,C]
     pre_IK = []
 
-    # Sans int() => TypeError: list indices must be integers or slices, not float
-    v0 = ext_triangle[int(t) % 3] 
-    v1 = ext_triangle[(int(t) + 1) % 3] # (int(t) + 1) => si sans () => IndexError: list index out of range
 
-    t_linear_interpolation = t % 1
+    v0 = ext_triangle[int(t/duration) % 3] 
+    v1 = ext_triangle[(int(t/duration) + 1) % 3] 
 
+    t_linear_interpolation = (t % duration) / duration
+    # t_linear_interpolation = t % 1    
     
     for i in range(3):
         v = (1 - t_linear_interpolation) * v0[i] + t_linear_interpolation * v1[i]
@@ -73,3 +73,12 @@ def triangle(triangle_x, triangle_z, triangle_h, triangle_w, t):
     thetas = computeIK(pre_IK[0], pre_IK[1], pre_IK[2])
 
     return thetas
+
+
+def circle(circle_x, circle_z, circle_r, t, duration):
+    theta =  (t  / duration) % 2 * math.pi
+    M = [circle_x, circle_r*math.sin(theta), circle_r*math.cos(theta) + circle_z]
+
+    return computeIK(M[0],M[1],M[2])
+    
+

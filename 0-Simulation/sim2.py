@@ -40,6 +40,7 @@ elif args.mode == "triangle" or args.mode == "triangle-points":
     sliders["triangle_z"] = p.addUserDebugParameter("triangle_z", -0.2, 0.3, 0)
     sliders["triangle_h"] = p.addUserDebugParameter("triangle_h", 0.01, 0.3, 0.1)
     sliders["triangle_w"] = p.addUserDebugParameter("triangle_w", 0.01, 0.3, 0.2)
+    sliders["triangle_duration"] = p.addUserDebugParameter("triangle_duration", 0.01, 10, 3)
 elif args.mode == "circle" or args.mode == "circle-points":
     sliders["circle_x"] = p.addUserDebugParameter("circle_x", -1, 1, 0.4)
     sliders["circle_z"] = p.addUserDebugParameter("circle_z", -1, 1, 0.1)
@@ -116,9 +117,10 @@ while True:
                 z = p.readUserDebugParameter(sliders["triangle_z"])
                 h = p.readUserDebugParameter(sliders["triangle_h"])
                 w = p.readUserDebugParameter(sliders["triangle_w"])
+                duration = p.readUserDebugParameter(sliders["triangle_duration"])
             except Exception as e:
                 continue
-            alphas = kinematics.triangle(x, z, h, w, sim.t)
+            alphas = kinematics.triangle(x, z, h, w, sim.t, duration)
             targets = {
                 "motor1": -alphas[0],
                 "motor2": -alphas[1],
@@ -130,10 +132,13 @@ while True:
             sim.addDebugPosition(pos, duration=3)
 
         elif args.mode == "circle":
-            x = p.readUserDebugParameter(sliders["circle_x"])
-            z = p.readUserDebugParameter(sliders["circle_z"])
-            r = p.readUserDebugParameter(sliders["circle_r"])
-            duration = p.readUserDebugParameter(sliders["circle_duration"])
+            try:
+                x = p.readUserDebugParameter(sliders["circle_x"])
+                z = p.readUserDebugParameter(sliders["circle_z"])
+                r = p.readUserDebugParameter(sliders["circle_r"])
+                duration = p.readUserDebugParameter(sliders["circle_duration"])
+            except Exception as e:
+                continue
             alphas = kinematics.circle(x, z, r, sim.t, duration)
 
             targets = {
