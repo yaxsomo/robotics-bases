@@ -96,8 +96,11 @@ while True:
         # )
         state = sim.setJoints(targets)
     elif args.mode == "direct":
-        for name in controls.keys():
-            targets[name] = p.readUserDebugParameter(controls[name])
+        try:
+            for name in controls.keys():
+                targets[name] = p.readUserDebugParameter(controls[name])
+        except Exception as e:
+            continue
         state = sim.setJoints(targets)
     elif args.mode == "inverse":
         x = p.readUserDebugParameter(controls["target_x"])
