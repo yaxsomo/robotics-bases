@@ -55,7 +55,9 @@ elif args.mode == "direct":
             controls[name] = p.addUserDebugParameter(name, -math.pi, math.pi, 0)
 elif args.mode == "inverse":
     cross = p.loadURDF("target2/robot.urdf")
-    alphas = kinematics.computeDK(0, 0, 0, use_rads=True)
+    # alphas = kinematics.computeDK(0, 0, 0, use_rads=True)
+    alphas = kinematics.computeDK(0, 0, 0)
+    
     controls["target_x"] = p.addUserDebugParameter("target_x", -0.4, 0.4, alphas[0])
     controls["target_y"] = p.addUserDebugParameter("target_y", -0.4, 0.4, alphas[1])
     controls["target_z"] = p.addUserDebugParameter("target_z", -0.4, 0.4, alphas[2])
@@ -106,9 +108,13 @@ while True:
         x = p.readUserDebugParameter(controls["target_x"])
         y = p.readUserDebugParameter(controls["target_y"])
         z = p.readUserDebugParameter(controls["target_z"])
-        alphas = kinematics.computeIK(x, y, z, verbose=True, use_rads=True)
+        # alphas = kinematics.computeIK(x, y, z, verbose=True, use_rads=True)
+        alphas = kinematics.computeIK(x, y, z)
+        
 
-        dk0 = kinematics.computeDK(0, 0, 0, use_rads=True)
+        # dk0 = kinematics.computeDK(0, 0, 0, use_rads=True)
+        dk0 = kinematics.computeDK(0, 0, 0)
+        
         targets["j_c1_rf"] = alphas[0]
         targets["j_thigh_rf"] = alphas[1]
         targets["j_tibia_rf"] = alphas[2]
