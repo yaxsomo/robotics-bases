@@ -64,7 +64,6 @@ def triangle(triangle_x, triangle_z, triangle_h, triangle_w, t, duration):
     v1 = ext_triangle[(int(t/duration) + 1) % 3] 
 
     t_linear_interpolation = (t % duration) / duration
-    # t_linear_interpolation = t % 1    
     
     for i in range(3):
         v = (1 - t_linear_interpolation) * v0[i] + t_linear_interpolation * v1[i]
@@ -81,4 +80,24 @@ def circle(circle_x, circle_z, circle_r, t, duration):
 
     return computeIK(M[0],M[1],M[2])
     
+def segment(x1,y1,z1,x2,y2,z2,t,duration):
+    A = [x1,y1,z1]
+    B = [x2,y2,z2]
+    pre_IK = []
+    
+    path = [A,B]
+    
+    v0 = path[int(t/duration) % 2] 
+    v1 = path[(int(t/duration) + 1) % 2] 
+    
+    t_linear_interpolation = (t % duration) / duration
+    
+    for i in range(3):
+        v = (1 - t_linear_interpolation) * v0[i] + t_linear_interpolation * v1[i]
+        pre_IK.append(v)
+    
+    thetas = computeIK(pre_IK[0], pre_IK[1], pre_IK[2])
 
+    return thetas
+    
+    

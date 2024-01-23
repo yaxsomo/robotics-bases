@@ -151,13 +151,16 @@ while True:
             pos[2] += bz
             sim.addDebugPosition(pos, duration=3)
         elif args.mode == "segment":
-            segment_x1 = p.readUserDebugParameter(sliders["segment_x1"])
-            segment_y1 = p.readUserDebugParameter(sliders["segment_y1"])
-            segment_z1 = p.readUserDebugParameter(sliders["segment_z1"])
-            segment_x2 = p.readUserDebugParameter(sliders["segment_x2"])
-            segment_y2 = p.readUserDebugParameter(sliders["segment_y2"])
-            segment_z2 = p.readUserDebugParameter(sliders["segment_z2"])
-            duration = p.readUserDebugParameter(sliders["segment_duration"])
+            try:
+                segment_x1 = p.readUserDebugParameter(sliders["segment_x1"])
+                segment_y1 = p.readUserDebugParameter(sliders["segment_y1"])
+                segment_z1 = p.readUserDebugParameter(sliders["segment_z1"])
+                segment_x2 = p.readUserDebugParameter(sliders["segment_x2"])
+                segment_y2 = p.readUserDebugParameter(sliders["segment_y2"])
+                segment_z2 = p.readUserDebugParameter(sliders["segment_z2"])
+                duration = p.readUserDebugParameter(sliders["segment_duration"])
+            except Exception as e:
+                continue
             alphas = kinematics.segment(
                 segment_x1,
                 segment_y1,
