@@ -18,6 +18,7 @@ USE_RADS_INPUT = False
 USE_RADS_OUTPUT = False
 USE_MM_INPUT = False
 USE_MM_OUTPUT = False
+TO_DEGREES = 180 / math.pi
 
 if ROBOT_TYPE == PHANTOMX:
     constL1 = 0.001 * 54.8
