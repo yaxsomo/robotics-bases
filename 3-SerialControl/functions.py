@@ -1,7 +1,7 @@
 import serialcom
 import constants
 import time
-
+import math
 
 def checksum(data):
     return (~data) & 0xff
@@ -89,7 +89,7 @@ def create_instruction(data_id, data_length, data_instruction, data_parameters):
     
     data = bytes(list_of_integers)
     
-    print(f"to be send = {data}")
+    # print(f"to be send = {data}")
 
     
     return data
@@ -133,4 +133,17 @@ def read_goal_position(serial_port, motor_addr):
         translated_error = error_traduction(extract_from_status(d,4))
         print(f"Status : {translated_error.name}")
         print(f"Position : {present_position_fusion}")
+
+def move_arm(serial_port, motor_addr1, motor_addr2, motor_addr3):
+    print("Moving Arm")
+    val = 150 + 10*math.sin(2*math.pi * constants.F * time.time())
+    while(True):
+        
+        set_goal_position(serial_port, motor_addr1, val)
+        set_goal_position(serial_port, motor_addr2, val)
+        set_goal_position(serial_port, motor_addr3, val)
+         
+        time.sleep(0.01)
+         
+         
     

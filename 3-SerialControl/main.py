@@ -24,10 +24,11 @@ if __name__ == "__main__":
         functions.led_blink(serial_port, 11) # Blink Test for motor address 11
     elif args.mode == "set_position":
         print("Mode SET POSITION")
-        functions.set_goal_position(serial_port, 53, 0) # Set goal position of one motor. TO TEST
+        functions.set_goal_position(serial_port, 11, 90) # Set goal position of one motor. TO TEST
     elif args.mode == "read_position":
         print("Mode READ POSITION")
         functions.read_goal_position(serial_port, 11)
     elif args.mode == "move_arm":
         print("Mode MOVE ARM")
+        functions.move_arm(serial_port, 11, 12, 13)
     

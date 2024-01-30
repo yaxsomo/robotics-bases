@@ -2,6 +2,7 @@ from enum import Enum
 
 
 DATA_START = 0xFF
+F = 0.5
 
 class Register(Enum):
     MODEL_NUMBER_L = 0
