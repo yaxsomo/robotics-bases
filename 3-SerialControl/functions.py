@@ -25,7 +25,7 @@ def error_traduction(error_byte):
 
 def degrees_to_goal_position(degrees):
     # Calculate the goal position based on the provided unit of 0.29 degrees
-    goal_position = int(round(degrees / 0.29))
+    goal_position = int(round(degrees / 0.29296875))
     
     # Ensure the goal position is within the valid range (0 to 1023)
     goal_position = max(0, min(1023, goal_position))
@@ -38,22 +38,20 @@ def split_goal_position(goal_position):
     
     return goal_position_l, goal_position_h
 
-def extract_error(status_packet):
-    extracted_error = (status_packet >> 24) & 0xFF
-    
-    return extracted_error
+def extract_from_status(status_packet, position):
+    return status_packet[position]
 
 def led_blink(serial_port,motor_addr):
     while(True):
         #Turn Led On
-        data = create_instruction(motor_addr, 4, 3, [25, 1])
+        data = create_instruction(motor_addr, 4, constants.Instructions.WRITE.value, [constants.Register.LED.value, 1])
         serialcom.write_data(serial_port, data)
         d = serialcom.read_data(serial_port, 6)
         if(d):
             print(f"Led ON : {d}")
         time.sleep(1)
         #Turn Led Off
-        data = create_instruction(53, 4, 3, [25, 0])
+        data = create_instruction(motor_addr, 4, 3, [25, 0])
         serialcom.write_data(serial_port, data)
         d = serialcom.read_data(serial_port, 6)
         if(d):
@@ -91,7 +89,7 @@ def create_instruction(data_id, data_length, data_instruction, data_parameters):
     
     data = bytes(list_of_integers)
     
-    # print(f"to be send = {data}")
+    print(f"to be send = {data}")
 
     
     return data
@@ -104,14 +102,35 @@ def set_goal_position(serial_port, motor_addr, position_in_degrees):
     
     data = create_instruction(motor_addr, 
                               5, 
-                              constants.Instructions.REG_WRITE.value, 
+                              constants.Instructions.WRITE.value, 
                               [constants.Register.GOAL_POSITION_L.value, 
                                goal_position_l_value, 
                                goal_position_h_value]
                               )
+    print(f"To be sent : {data}")
     print("Set Goal Position sent.")
     serialcom.write_data(serial_port, data)
     d = serialcom.read_data(serial_port, 6)
     if(d):
-        translated_error = error_traduction(extract_error(d))
+        translated_error = error_traduction(extract_from_status(d,3))
         print(f"Status : {translated_error.name}")
+        
+        
+def read_goal_position(serial_port, motor_addr):
+    data = create_instruction(motor_addr, 
+                              4, 
+                              constants.Instructions.READ.value, 
+                              [constants.Register.PRESENT_POSITION_L.value, 
+                               2]
+                              )
+    print("Reading Goal Position..")
+    serialcom.write_data(serial_port, data)
+    d = serialcom.read_data(serial_port, 8)
+    if(d):
+        present_position_l = extract_from_status(d,5)
+        present_position_h = extract_from_status(d,6)
+        present_position_fusion = int(present_position_l + (present_position_h << 8))
+        translated_error = error_traduction(extract_from_status(d,4))
+        print(f"Status : {translated_error.name}")
+        print(f"Position : {present_position_fusion}")
+    
